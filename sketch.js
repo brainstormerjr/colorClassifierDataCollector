@@ -19,8 +19,8 @@ firebase.initializeApp(firebaseConfig);
 let database = firebase.database();
 let authPromise = firebase.auth().signInAnonymously();
 
-let blacklist = ['JG5NR5dcVSSnVNvrZU9clFuzHel1', 'XgFU4YOxgmPcPa9DpSOc6mixmKX2'];
-//let blacklist = ['JG5NR5dcVSSnVNvrZU9clFuzHel1'];
+//let blacklist = ['JG5NR5dcVSSnVNvrZU9clFuzHel1', 'XgFU4YOxgmPcPa9DpSOc6mixmKX2'];
+let blacklist = ['JG5NR5dcVSSnVNvrZU9clFuzHel1'];
 
 let modal = document.getElementById('modal');
 let blacklistModal = document.getElementById('blacklistModal');
