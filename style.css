@@ -124,6 +124,10 @@ button[c="Brown"]:hover {
   height: 20px;
 }
 
+.infoButton:hover {
+  cursor: pointer;
+}
+
 
 .modal {
   display: none ;
