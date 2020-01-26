@@ -128,6 +128,17 @@ button[c="Brown"]:hover {
   cursor: pointer;
 }
 
+.alertButton {
+  background: url("alert.png");
+  width: 20px;
+  height: 20px;
+}
+
+.alertButton:hover {
+  cursor: pointer;
+}
+
+
 
 .modal {
   display: none ;
@@ -170,5 +181,29 @@ color: #aaa;
 @keyframes animatetop {
   from {top: -300px; opacity: 0}
   to {top: 0; opacity: 1}
+}
+
+.blacklistModal {
+  display: none ;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.blacklistModalContent {
+  background-color: white;
+  margin: 15% auto;
+  padding: 40px;
+  border: 0;
+  width: 80%;
+  /*height:30%;*/
+  animation-name: animatetop;
+  animation-duration: 0.4s;
+  border-radius: 10px;
 }
 
