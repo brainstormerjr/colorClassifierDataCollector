@@ -1,7 +1,9 @@
 let currentColor;
 let buttons = [];
 let infoButton;
+let alertButton;
 let colorDiv;
+let blacklisted = false;
 
 //setup and initialize firebase
 const firebaseConfig = {
@@ -17,8 +19,13 @@ firebase.initializeApp(firebaseConfig);
 let database = firebase.database();
 let authPromise = firebase.auth().signInAnonymously();
 
-var modal = document.getElementById('modal');
-var span = document.getElementsByClassName('close')[0];
+let blacklist = ['JG5NR5dcVSSnVNvrZU9clFuzHel1', 'XgFU4YOxgmPcPa9DpSOc6mixmKX2'];
+//let blacklist = ['JG5NR5dcVSSnVNvrZU9clFuzHel1'];
+
+let modal = document.getElementById('modal');
+let blacklistModal = document.getElementById('blacklistModal');
+let modalCloseButton = document.getElementsByClassName('close')[0];
+let blacklistCloseButton = document.getElementsByClassName('close')[1];
 
 function pickNewColor() {
   //random colors
@@ -57,27 +64,31 @@ function setGradient(r, g, b) {
 
 async function buttonPressed() {
   //print(this.html());
-  let { user } = await authPromise;
+  let {user} = await authPromise;
   let colorDatabase = database.ref('colors');
   let r = red(currentColor);
   let g = green(currentColor);
   let b = blue(currentColor);
+  if (!blacklisted) {
 
-  var data = {
-    uid: user.uid,
-    r: r,
-    g: g,
-    b: b,
-    label: this.html()
-  };
+    var data = {
+      uid: user.uid,
+      r: r,
+      g: g,
+      b: b,
+      label: this.html()
+    };
 
-  console.log('Saving Data...');
-  console.log(data);
+    console.log('Saving Data...');
+    console.log(data);
 
-  let color = colorDatabase.push(data, finished);
-  console.log(`Firebase generated key: ${color.key}`);
+    let color = colorDatabase.push(data, finished);
+    console.log(`Firebase generated key: ${color.key}`);
 
-  pickNewColor();
+    pickNewColor();
+  } else {
+    openBlacklistModal();
+  }
 
   function finished(err) {
     if (err) {
@@ -95,19 +106,46 @@ function openInfo() {
   modal.style.display = 'block';
 }
 
-span.onclick = function() {
-  modal.style.display = 'none';
+function openBlacklistModal() {
+  blacklistModal.style.display = 'block';
 }
 
-window.onclick = function(event) {
+modalCloseButton.onclick = function () {
+  modal.style.display = 'none';
+};
+
+blacklistCloseButton.onclick = function () {
+  blacklistModal.style.display = 'none';
+};
+
+window.onclick = function (event) {
   if (event.target == modal) {
     modal.style.display = "none";
+  } else if (event.target == blacklistModal) {
+    blacklistModal.style.display = "none";
+  }
+};
+
+async function checkBlackList() {
+  for (let uid of blacklist) {
+    let {user} = await authPromise;
+    if (user.uid == uid) {
+      blacklisted = true;
+      console.log('YOU ARE BLACKLISTED');
+      alertButton = createImg('alert.png', 'error loading image');
+      alertButton.position(30, 30);
+      alertButton.class('alertButton');
+      alertButton.mousePressed(openBlacklistModal);
+    }
   }
 }
 
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+
+  checkBlackList();
+
 
   //setup div for color text display
   colorDiv = createDiv();
@@ -136,10 +174,12 @@ function setup() {
     buttons[i].attribute('c', buttons[i].html());
     buttons[i].mousePressed(buttonPressed);
   }
+
   infoButton = createImg('info.png', 'error loading image');
   infoButton.position(width - 50, 30);
   infoButton.class('infoButton');
   infoButton.mousePressed(openInfo);
+
 
   pickNewColor();
 }
