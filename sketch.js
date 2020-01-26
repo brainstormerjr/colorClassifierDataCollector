@@ -13,9 +13,13 @@ const firebaseConfig = {
   projectId: "color-classification-e92cd",
   storageBucket: "color-classification-e92cd.appspot.com",
   messagingSenderId: "95381377312",
-  appId: "1:95381377312:web:07003c3e2b2cb35dbbc745"
+  appId: "1:95381377312:web:07003c3e2b2cb35dbbc745",
+  measurementId: "G-VDR0QJ61YE"
 };
+// Initialize Firebase
 firebase.initializeApp(firebaseConfig);
+firebase.analytics();
+
 let database = firebase.database();
 let authPromise = firebase.auth().signInAnonymously();
 
